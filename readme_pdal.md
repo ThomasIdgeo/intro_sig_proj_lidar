@@ -20,7 +20,7 @@ PDAL
 	- Intégré à QGIS depuis version 3.34
 	- pipelines json
 	
-> Différences avec LASttools
+> Différences avec LASTools
 
 	1. Tous les composants de la librairie sont diffusés sous licence libre.
 	2. PDAL manipule tous les formats de nuages de points autre que .las
@@ -38,7 +38,7 @@ Miniconda est libre, installation minimaliste de distribution Conda qui inclue C
 - Création du répertoire dans le home de l'utilisateur courant
 
 ```bash
-mkdir -p ~/miniconda3
+mkdir -p ~/miniconda3 && cd ~/miniconda3
 ```
 
 - Téléchargement du script d'installation (-> renommer miniconda.sh)
@@ -71,7 +71,7 @@ conda init --all
 
 - **Création de l'environnement de travail**, incluant PDAL
 ```bash
-conda create --yes --name myenv --channel conda-forge pdal
+conda create --yes --name envidgeo --channel conda-forge pdal
 ```
 
 - Info sur les env de travail
@@ -81,10 +81,10 @@ conda info --envs
 
 - On bascule dessus
 ```bash
-conda activate myenv
+conda activate envidgeo
 ```
 
-*(myenv) thomas@PCP-Thomas:~$*
+*(envidgeo) thomas@PCP-Thomas:~$*
 
 - Mise à jour de PDAL
 ```bash
@@ -96,16 +96,15 @@ conda update pdal
 pdal --drivers
 ```
 
-- L'aide contextuelle
-```bash
-pdal --help
+```{note}
+L'aide contextuelle
+	`pdal <command> --help`
 ```
 
 
 ### Manipulations
 
 crop, colorinterp, colorization (avec une ortho), geomdistance, reprojection, splitter
-
 
 
 - 
@@ -115,27 +114,30 @@ $ pdal translate input.las output.las
 $ pdal pipeline --stdin < pipeline.json
 ```
 
-- 
-```bash
-crop
-```
-
-- 
+- SPlit pour répartir la charge entre plusieurs fichiers au format Binary Point File .bpf
 ```bash
 pdal split --capacity 5000000 LHD_FXX_0618_6346_PTS_C_LAMB93_IGN69.copc.laz split/out.bpf
 ```
 
-- 
+- pdal ground permet d'extraire le sol par exemple
+```bash
+pdal ground --extract "Classification=2" -i LHD_FXX_0618_6346_PTS_C_LAMB93_IGN69.copc.laz -o extract_2.laz
+```
+
+- Création d'un MNT
 ```bash
 
 ```
 
-- 
+- Utilisation du pipeline pour réaliser une chaine de traitement
+
+> Traitement simple d'une entrée (reader), filtres crop sur un extent (filter) vers une sortie (writers)
+```bash
+pdal pipeline --stdin < pipeline_test.json
+```
+
+> Traitement crop avec shape + reprojection en json 
 ```bash
 
 ```
 
-- 
-```bash
-
-```

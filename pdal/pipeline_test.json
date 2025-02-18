@@ -1,0 +1,8 @@
+[
+    "entier.copc.laz",
+    {
+        "type":"filters.crop",
+        "bounds":"([618340,6345512],[618613,6345775])"
+    },
+    "output_test.las"
+]
