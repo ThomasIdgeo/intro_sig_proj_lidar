@@ -156,7 +156,7 @@ gdalbuildvrt -srcnodata "0" assemble_srcnodata.vrt *.jp2
 > Conversion d'un jp2 en tif
 
 > [!WARNING]
-> [Attention - Opération longue](#){.btn .btn-warning}
+> **Attention - Opération longue**
 
 ```bash
 gdal_translate -of GTiff ORT_2022_1572415_2268000.jp2 ORT_2022_1572415_2268000.tif
@@ -180,7 +180,7 @@ gdalwarp -s_srs EPSG:3943 -t_srs EPSG:4326 -dstalpha ORT_2022_1572415_2268000.jp
 
 Ligne 2 :
 
-- SRS dataAxisToSRSAxisMapping="1,2"-PROJCS["RGF93 v1 / CC43"]
+	SRS dataAxisToSRSAxisMapping="1,2"-PROJCS["RGF93 v1 / CC43"]
 
 > Tentons de reprojeter ce VRT
 ```bash
@@ -188,45 +188,57 @@ gdalwarp -s_srs EPSG:3943 -t_srs EPSG:4326 -dstalpha assemble.vrt assemble_4326.
 ```
 
 On constate juste un changement et une rapidité d'éxécution incomparable
-- SRS dataAxisToSRSAxisMapping="2,1">GEOGCS["WGS 84",DATUM["WGS_1984"]
+	SRS dataAxisToSRSAxisMapping="2,1">GEOGCS["WGS 84",DATUM["WGS_1984"]
 
 #### Assembler des Rasters
 
+> Lister les images du dossier courant
 ```bash
-gdal_merge 
+ls -1 *.asc > liste_asc.txt
 ```
-
+> Merge des images avec la liste en entrée
 ```bash
-
+gdal_merge.py -a_nodata 0 -o mosaic.tif --optfile liste_asc.txt
 ```
 
 #### Découper un Raster
 
-> avec une emprise
+> avec une emprise (copie from qgis) 636 222  6 343 004 665 081  6 361 244
 
 ```bash
-
+gdalwarp -s_srs EPSG:2154 -t_srs EPSG:2154 -te 636222  6343004 665081  6361244 -crop_to_cutline mosaic.tif mosaic_crop_emprise.tif
 ```
 
 > avec un vecteur
 
 ```bash
-
+gdalwarp  -s_srs EPSG:2154 -t_srs EPSG:2154 -cutline vecteur/DEPARTEMENT.shp -cl DEPARTEMENT -cwhere "INSEE_DEP = '12'" -crop_to_cutline mosaic.tif mosaic_crop_aveyron.tif
 ```
 
 ### OGR  - La librairie des vecteurs
 
 > ogrinfo (métadonnées)
 ```bash
-
+ogrinfo -so vecteur/DEPARTEMENT.shp DEPARTEMENT
 ```
-> ogr2ogr : repojection ou changement de format
+> ogr2ogr : reprojection ou changement de format
 ```bash
-
+ogr2ogr -s_srs EPSG:2154 -t_srs EPSG:4326 vecteur/DEPARTEMENT_4326.shp vecteur/DEPARTEMENT.shp
 ```
 
 ```bash
+ogr2ogr vecteur/dept.json vecteur/DEPARTEMENT_4326.shp
+```
 
+> Création d'une zone tampon des voies ferrées
+
+- on reprojette la couche en Lambert93 (pour avoir des unités en mètres et la comparer par la suite aux départements)
+```bash
+ogr2ogr -s_srs EPSG:4326 -t_srs EPSG:2154 vecteur/lignes_rff_2154.shp vecteur/formes-des-lignes-du-rfn.shp
+```
+- on crée la zone tampon (nouveau shpaefile)
+```bash
+ogr2ogr -dialect sqlite -sql "select st_buffer(Geometry,50) as geom from lignes_rff_2154" vecteur/zt_lignes_rff.shp vecteur/lignes_rff_2154.shp 
 ```
 
 Le cas des MNT
