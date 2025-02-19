@@ -1,0 +1,17 @@
+{
+    "pipeline": [
+        {
+            "type": "readers.las",
+            "filename": "input.laz"
+        },
+        {
+            "type": "filters.reprojection",
+            "in_srs": "EPSG:2154",
+            "out_srs": "EPSG:4326"
+        },
+        {
+            "type": "writers.text",
+            "filename": "output.json"
+        }
+    ]
+}

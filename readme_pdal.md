@@ -124,9 +124,9 @@ pdal split --capacity 5000000 LHD_FXX_0618_6346_PTS_C_LAMB93_IGN69.copc.laz spli
 pdal ground --extract "Classification=2" -i LHD_FXX_0618_6346_PTS_C_LAMB93_IGN69.copc.laz -o extract_2.laz
 ```
 
-- Création d'un MNT
+- Création d'un MNT au format tif (Interpolation - Inverse Distance Weighting)
 ```bash
-
+pdal translate input.laz output_mnt.tif --writers.gdal.resolution=1.0 --writers.gdal.output_type=idw
 ```
 
 - Utilisation du pipeline pour réaliser une chaine de traitement
@@ -136,8 +136,17 @@ pdal ground --extract "Classification=2" -i LHD_FXX_0618_6346_PTS_C_LAMB93_IGN69
 pdal pipeline --stdin < pipeline_test.json
 ```
 
-> Traitement crop avec shape + reprojection en json 
+> Traitement crop avec shape + reprojection en json => rédaction du pipeline_geojson.json
 ```bash
-
+pdal pipeline pipeline_geojson.json
 ```
 
+```{WARNING}
+	Miniconda n'embarque pas geojson, le writer geojson est absent de PDAL.
+```
+
+. Créer un pipeline qui reprojette et découpe en même temps accepte quelques contraintes :
+	- le crop se fait sur du geojson
+	- le buffer sur une coupe de point
+
+**Le pipeline permt la répétition des tâches à la façon d'un ETL**
