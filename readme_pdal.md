@@ -146,7 +146,11 @@ pdal pipeline pipeline_geojson.json
 ```
 
 . Créer un pipeline qui reprojette et découpe en même temps accepte quelques contraintes :
+
 	- le crop se fait sur du geojson
+ 
 	- le buffer sur une coupe de point
 
-**Le pipeline permt la répétition des tâches à la façon d'un ETL**
+**Le pipeline permet la répétition des tâches à la façon d'un ETL**
+
+Exemple de la colorisation du nuage de point avec un raster en entrée : https://pdal.io/en/stable/workshop/manipulation/colorization/colorization.html
