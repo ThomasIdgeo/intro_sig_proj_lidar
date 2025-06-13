@@ -16,7 +16,7 @@ Certains outils sont Open source et d'autres sont sous licence.
 ### Installation sur Windows :
 
 1.    create directory "c:\lastools"
-2.    unzip LAStools.zip to this directory
+2.    Télécharger Lastools https://downloads.rapidlasso.de/LAStools.zip unzip LAStools.zip to this directory
 3.    run the LAStools executables
 
 En parallèle, installer le plugin sur QGIS. Redémarrer QGIS et paramétrer Préférences > Option
