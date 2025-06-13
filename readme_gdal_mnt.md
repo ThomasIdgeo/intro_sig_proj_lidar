@@ -13,6 +13,14 @@ wget https://data.geopf.fr/telechargement/download/BDALTI/BDALTIV2_2-0_25M_ASC_L
 ```
 unzip (7z à installer certainement)
 
+```bash
+sudo apt install p7zip-full
+```
+
+```bash
+7z x BDALTIV2_2-0_25M_ASC_LAMB93-IGN69_D012_2022-09-29.7z
+```
+
 - Qu'est-ce qu'on cherche à faire ? 
 
 => Découpage de raster par vecteur, on prépare et on contrôle pour obtenir le résultat.
